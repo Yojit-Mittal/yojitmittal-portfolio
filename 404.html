@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 // CONNECTION LOST | Yojit Mittal Lab</title>
+  <meta name="description" content="System failure — the requested node could not be located.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --accent: #FF3A20;
+      --green: #00FF66;
+      --muted: #444;
+      --font-display: 'Anton', sans-serif;
+      --font-mono: 'Space Mono', monospace;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: #fff;
+      font-family: var(--font-mono);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      cursor: none;
+    }
+
+    /* Custom cursor */
+    .custom-cursor {
+      position: fixed; top: 0; left: 0;
+      width: 6px; height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 10000;
+      transform: translate(-50%, -50%);
+    }
+    .cursor-follower {
+      position: fixed; top: 0; left: 0;
+      width: 36px; height: 36px;
+      border: 1px solid rgba(255,58,32,0.5);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+    }
+
+    /* Scanlines overlay */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.15) 2px,
+        rgba(0,0,0,0.15) 4px
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Noise texture */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: 0.4;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .error-wrap {
+      position: relative; z-index: 10;
+      text-align: center;
+      padding: 2rem;
+      max-width: 900px;
+    }
+
+    /* Giant glitching 404 */
+    .error-code {
+      font-family: var(--font-display);
+      font-size: clamp(8rem, 22vw, 20rem);
+      line-height: 0.85;
+      letter-spacing: -0.04em;
+      color: #fff;
+      position: relative;
+      user-select: none;
+      animation: glitch-main 3s infinite;
+    }
+
+    /* Glitch layers */
+    .error-code::before,
+    .error-code::after {
+      content: attr(data-text);
+      position: absolute; top: 0; left: 0; right: 0;
+      font-family: var(--font-display);
+      font-size: inherit;
+      letter-spacing: inherit;
+    }
+    .error-code::before {
+      color: var(--accent);
+      clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+      animation: glitch-top 2.5s infinite;
+      transform: translate(-4px, -2px);
+    }
+    .error-code::after {
+      color: var(--green);
+      clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%);
+      animation: glitch-bot 2s infinite;
+      transform: translate(4px, 2px);
+    }
+
+    @keyframes glitch-main {
+      0%, 94%, 100% { transform: translate(0); }
+      95% { transform: translate(-3px, 1px); }
+      96% { transform: translate(3px, -1px); }
+      97% { transform: translate(-2px, 2px); }
+    }
+    @keyframes glitch-top {
+      0%, 90%, 100% { transform: translate(-4px, -2px); opacity: 0.8; }
+      91% { transform: translate(6px, -3px); opacity: 1; }
+      93% { transform: translate(-8px, 2px); opacity: 0.6; }
+    }
+    @keyframes glitch-bot {
+      0%, 88%, 100% { transform: translate(4px, 2px); opacity: 0.8; }
+      89% { transform: translate(-6px, 4px); opacity: 1; }
+      91% { transform: translate(8px, -2px); opacity: 0.6; }
+    }
+
+    /* Terminal log readout */
+    .terminal-log {
+      margin-top: 3rem;
+      text-align: left;
+      display: inline-block;
+      min-width: 460px;
+      max-width: 600px;
+    }
+    .log-line {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+      opacity: 0;
+      animation: fadein 0.3s forwards;
+    }
+    .log-line.accent-line { color: var(--accent); }
+    .log-line.green-line  { color: var(--green); }
+    .log-line span { color: #666; margin-right: 1rem; }
+
+    @keyframes fadein { to { opacity: 1; } }
+
+    /* Status badge */
+    .status-badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.4rem 1rem;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      animation: badge-blink 1.5s infinite;
+    }
+    @keyframes badge-blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* Redirect button */
+    .return-link {
+      display: inline-block;
+      margin-top: 3rem;
+      font-family: var(--font-mono);
+      font-size: 0.9rem; font-weight: 700;
+      text-decoration: none; color: #fff;
+      border: 1px solid rgba(255,255,255,0.3);
+      padding: 1.2rem 2.5rem;
+      letter-spacing: 0.08em;
+      transition: 0.3s;
+      cursor: none;
+      position: relative; overflow: hidden;
+    }
+    .return-link::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s cubic-bezier(0.19,1,0.22,1);
+    }
+    .return-link:hover::before { transform: scaleX(1); }
+    .return-link span { position: relative; z-index: 1; }
+
+    /* Error label at bottom */
+    .error-label {
+      position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      font-size: 0.7rem; color: var(--muted); letter-spacing: 0.1em;
+      z-index: 10;
+    }
+    .error-label em { color: var(--accent); font-style: normal; }
+
+    /* Flickering horizontal lines */
+    .glitch-bar {
+      position: fixed;
+      left: 0; right: 0; height: 2px;
+      background: var(--accent);
+      opacity: 0;
+      animation: bar-scan 4s infinite;
+    }
+    .glitch-bar:nth-child(2) { animation-delay: 1.3s; }
+    .glitch-bar:nth-child(3) { animation-delay: 2.7s; }
+    @keyframes bar-scan {
+      0% { top: -5px; opacity: 0; }
+      5% { opacity: 0.6; }
+      100% { top: 105vh; opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="custom-cursor" id="dot"></div>
+  <div class="cursor-follower" id="ring"></div>
+
+  <!-- Scanning glitch bars -->
+  <div class="glitch-bar"></div>
+  <div class="glitch-bar"></div>
+  <div class="glitch-bar"></div>
+
+  <div class="error-wrap">
+    <div class="status-badge">⬛ SYSTEM FAILURE // NODE UNREACHABLE</div>
+
+    <div class="error-code" data-text="404">404</div>
+
+    <div class="terminal-log" id="log"></div>
+
+    <a href="index.html" class="return-link" id="return-btn">
+      <span>[ REROUTE TO MAIN BASE → ]</span>
+    </a>
+  </div>
+
+  <p class="error-label">ERR: <em>NODE_NOT_FOUND</em> // YM.LAB // IDX: 404</p>
+
+  <script>
+    // Cursor physics
+    const dot  = document.getElementById('dot');
+    const ring = document.getElementById('ring');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; dot.style.transform = `translate(${mx-3}px,${my-3}px)`; });
+    (function animRing() {
+      rx += (mx - rx) * 0.15; ry += (my - ry) * 0.15;
+      ring.style.transform = `translate(${rx-18}px,${ry-18}px)`;
+      requestAnimationFrame(animRing);
+    })();
+    document.getElementById('return-btn').addEventListener('mouseenter', () => ring.style.border = '1px solid #FF3A20');
+    document.getElementById('return-btn').addEventListener('mouseleave', () => ring.style.border = '1px solid rgba(255,58,32,0.5)');
+
+    // Terminal log typewriter
+    const logLines = [
+      { text: '> INITIATING DIAGNOSTIC SCAN...', cls: '' },
+      { text: '> TRACING ROUTE TO: ' + window.location.pathname, cls: '' },
+      { text: '> PACKET LOSS: 100%', cls: 'accent-line' },
+      { text: '> NODE STATUS: UNREACHABLE', cls: 'accent-line' },
+      { text: '> ERROR CODE: 404 // RESOURCE NOT FOUND', cls: 'accent-line' },
+      { text: '> FAILSAFE INITIATED.', cls: '' },
+      { text: '> SUGGEST: ABORT // REROUTE TO ORIGIN NODE.', cls: 'green-line' },
+    ];
+    const container = document.getElementById('log');
+    let idx = 0;
+    function addLine() {
+      if (idx >= logLines.length) return;
+      const l = logLines[idx];
+      const p = document.createElement('p');
+      p.className = 'log-line ' + l.cls;
+      p.style.animationDelay = (idx * 0.05) + 's';
+      p.innerHTML = `<span>[${String(idx).padStart(2,'0')}]</span>${l.text}`;
+      container.appendChild(p);
+      idx++;
+      setTimeout(addLine, 420);
+    }
+    setTimeout(addLine, 600);
+  </script>
+</body>
+</html>

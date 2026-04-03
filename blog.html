@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yojit Mittal | Lab Logs</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Custom Magnetic Cursor -->
+  <div class="custom-cursor"></div>
+  <div class="cursor-follower"></div>
+
+  <!-- Deep Background Architectural Text -->
+  <div class="bg-architecture">
+    <h1>WRITINGS</h1>
+    <h1>&_ RANTS</h1>
+  </div>
+
+  <!-- Easter Egg Alert -->
+  <div id="lab-egg">SYSTEM OVERRIDE INITIATED. WELCOME Y-01.</div>
+
+  <!-- Bar + Ball Preloader -->
+  <div id="uiverse-preloader" class="lab-loader-bg">
+    <div class="loader">
+      <div class="loader__bar"></div>
+      <div class="loader__bar"></div>
+      <div class="loader__bar"></div>
+      <div class="loader__bar"></div>
+      <div class="loader__bar"></div>
+      <div class="loader__ball"></div>
+    </div>
+    <span class="loader-label">LOADING_LOGS</span>
+  </div>
+
+  <nav class="premium-nav">
+    <div class="nav-left">
+      <a href="index.html" class="brand-monogram">YM.</a>
+      <span class="mono-label">IDX: 002</span>
+    </div>
+    
+    <div class="nav-right magnetic-wrap interactive">
+      <a href="index.html" class="nav-ghost-link magnetic-child"><- RETURN TO MAIN</a>
+    </div>
+  </nav>
+
+  <!-- 3D Background Container -->
+  <div id="canvas-container"></div>
+
+  <main class="smooth-scroll-wrapper" style="padding-top: 20vh;">
+    <!-- BLOG / WRITINGS SECTION -->
+    <section class="lab-section">
+      <div class="container">
+        
+        <div class="blog-grid" id="blog-container">
+          <!-- Post 1 -->
+          <a href="#" class="blog-card interactive magnetic-wrap stagger-reveal">
+            <div class="line-mask"><div class="blog-meta mono-label line-content">SYS_LOG: 001 // APR 2026</div></div>
+            <h3 class="blog-title">The Fallacy of 'Perfect' Code</h3>
+            <p class="blog-excerpt">Why over-engineering a structural hierarchy usually leads to a +400% increase in technical debt. Real-world observations from tearing down legacy systems.</p>
+            <div class="read-more mono-label accent-color">DECRYPT POST -></div>
+          </a>
+
+          <!-- Post 2 -->
+          <a href="#" class="blog-card interactive magnetic-wrap stagger-reveal">
+            <div class="line-mask"><div class="blog-meta mono-label line-content">SYS_LOG: 002 // MAY 2026</div></div>
+            <h3 class="blog-title">Blue Ocean Strategy in Cybersecurity</h3>
+            <p class="blog-excerpt">Stop fighting in crowded markets. How redefining the attack vector can completely alter defensive corporate positioning without ever running a zero-day.</p>
+            <div class="read-more mono-label accent-color">DECRYPT POST -></div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
